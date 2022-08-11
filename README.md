@@ -188,12 +188,9 @@ Clique em Arquivo > Importar Appliance
 
     ```bash
     # Let NetworkManager manage all devices on this system
-
     network:
-
-    version: 2
-
-    renderer: NetworkManager
+        version: 2
+            renderer: NetworkManager
 
     ```
 
