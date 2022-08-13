@@ -1,6 +1,14 @@
 # Projeto de Infraestrutura e Serviços de Redes
 
-Nesse tutorial, mostraremos os passos para instalar e configurar 8 VMs interconectadas, distribuídas em 4 máquinas.
+Nesse tutorial, mostraremos os passos para instalar e configurar 8 VMs interconectadas, distribuídas em 4 computadores.
+
+## Topologia física
+
+Antes de tudo, é necessário fazer com que os PCs físicos estejam, de fato, conectados. Para isso, conecte os 4 computadores a um switch e, caso queira, conecte um cabo de acesso à internet no switch para prover o acesso aos PCs.
+
+No nosso caso, a organicação ficou da seguinte forma (as setas vermelhas indicam as conexões da rede interna, e a linha verde, o cabo para acesso à internet, todos conectados ao switch):
+
+![figura1](/images/figura1.jpg)
 
 ## Definições de endereços IPs da rede e nomes de hosts
 
@@ -28,14 +36,14 @@ Os dados dessa tabela servirão como base para a configuração da interface de 
 - Crie uma pasta com o nome de sua preferência, no diretório de sua preferência (**certifique-se de que o usuário padrão tenha acesso ao diretório**). Escolhemos o diretório `/labredes/` como diretório base para esse guia e criamos a pasta `/labredes/projeto-913-grupo3/`.
 
   ```bash
-      sudo mkdir /labredes/<nome-da-pasta>/
+  sudo mkdir /labredes/<nome-da-pasta>/
   ```
 
 - Crie as subpastas `images/` e `vm/` em sua pasta principal.
 
   ```bash
-      sudo mkdir /labredes/<nome-da-pasta>/images/
-      sudo mkdir /labredes/<nome-da-pasta>/vm/
+  sudo mkdir /labredes/<nome-da-pasta>/images/
+  sudo mkdir /labredes/<nome-da-pasta>/vm/
   ```
 
 ---
@@ -74,11 +82,11 @@ sudo chmod -R 771 <diretório>
 
 ### Criando a VM a partir do arquivo `.ova` :
 
-![figura1](https://lh6.googleusercontent.com/ZUL_7gZ4GCyExmWgv5A2AnYPWHFnZVVAAotdwWZ3OMoqNlQsrMCTf5JxLzqxEqSGQwqt-UlzOs3WNkICOzZNtiECQbVOhkaMU1QtIpbgpZYXtB43eG1DUvisS8th-FoHxQdVTj3UPbx_AVeJiXTSmgY)
+![figura2](/images/figura2.png)
 
 Clique em Arquivo > Importar Appliance
 
-![figura2](https://lh6.googleusercontent.com/9JXI99nVTxxpM2xFGhB02CcvMpkuP24XREjZGe6OCRC-LgwR3SUQW6MFWEwXJybke7Di7o1LG3Ds3vuNn0EZ-X5biWsyKDQjNGpNHKIi0JgKes-4z6DcKa7Ij57qbqEu_PnqiP5AQWDQrktocgRPiGg)
+![figura3](/images/figura3.png)
 
 - Inicie as VMs e em cada uma faça login com o usuário `administrador` e a senha `adminifal`.
 
@@ -103,8 +111,8 @@ Clique em Arquivo > Importar Appliance
 - Utilize os comandos para atualizar os pacotes:
 
   ```bash
-      sudo apt update
-      sudo apt upgrade -y
+  sudo apt update
+  sudo apt upgrade -y
   ```
 
 - Instale o openssh-server:
@@ -116,7 +124,7 @@ Clique em Arquivo > Importar Appliance
 - Instale o net-tools:
 
   ```bash
-      sudo apt install net-tools -y
+  sudo apt install net-tools -y
   ```
 
 - Verifique se a porta 22 está como LISTEN para conexões TCP:
@@ -124,6 +132,8 @@ Clique em Arquivo > Importar Appliance
   ```bash
   netstat -an | grep LISTEN
   ```
+
+  ![figura4](/images/figura4.png)
 
 - Permita o acesso SSH no firewall:
 
@@ -138,16 +148,19 @@ Clique em Arquivo > Importar Appliance
   ```
 
 - Verifique se a conexão 22/TCP está, de fato, como ALLOW
+
   ```bash
   sudo ufw status
   ```
+
+  ![figura5](/images/figura5.png)
 
 ## Configuração das interfaces de redes das VMs
 
 - Agora edite o arquivo `01-netcfg.yaml`
 
   ```bash
-      sudo nano /etc/netplan/01-netcfg.yaml
+  sudo nano /etc/netplan/01-netcfg.yaml
   ```
 
   - Edite para deixar o arquivo de cada máquina no seguinte formato, apenas alterando o endereço no campo addresses - deixe em cada máquina o endereço atribuído à ela na tabela inicial, seguido de `/28`.
@@ -169,11 +182,11 @@ Clique em Arquivo > Importar Appliance
 
 - Com as máquinas virtuais desligadas, abra o VM Box, e em cada VM, vá nas configurações de rede e mude a rede para “Placa em modo Bridge”:
 
-  ![figura3](https://lh3.googleusercontent.com/8qtLSmpWj59PcpPkMaJ20euEnJtrjJFKIPUCXLhHNTpCWmPAWr35icb_pZTbi86Zz-b3-O4r96-1zVCRSWiSgallUBD5Z7V1M8i3yb_-aOz3OHkcCVL5r2_3YE89LhA7pcXqLpiGtkSkC0yewYFgpsw)
+  ![figura6](/images/figura6.png)
 
 - Vá em avançado, e clique no botão de recarregar, em Endereço MAC para adquirir um novo endereço e clique em "OK":
 
-  ![figura4](https://lh4.googleusercontent.com/aky52a4zVpTtevEZEojYgsE5CAt64rmX4rPKk4P4NeFzawvB6VMWf7c9dG-xFB99muL90XaI6h-yRZet5yLdT57cgPo_793D5t_Aft-lIj2t4D52W7yRSNjnVuKz69idicXSaRHOprYXBHXmt26i0Go)
+  ![figura7](/images/figura7.png)
 
 - Em cada PC físico edite o arquivo `01-network-manager-all.yaml`:
 
@@ -211,40 +224,68 @@ Clique em Arquivo > Importar Appliance
 
   No nosso exemplo, ficou da seguinte forma:
 
-  ![figura5](https://lh3.googleusercontent.com/FjtXnxx_cRL4FJCB9CteUfKs4dwvjkAlx9-m75Pw3GZ_3EuCavMwMCeb7Iw5TOU14v1265sg90th5-RdSW3ARfkGdBzSF8cr2TLFfVcpy6q0EUqyzLufUcHAglcQ59rH65c3AjuLRlKbvdJd0bhFkSo)
+  ![figura8](/images/figura8.png)
 
   **_Certifique-se fazer todo o processo em todos os computadores._**
+
+- Adicione os usuários em cada VM:
+
+  Aqui, adicionaremos 4 usuários em cada máquina virtual (cada um correspondendo a um integrante do grupo). Porém, você pode adicionar quais e quantos quiser. Basta rodar:
+
+  ```bash
+  sudo adduser <nome-do-usuario>
+  ```
 
 ---
 
 ## Testando conectividade e funcionalidades
 
-Conecte todos os 4 computadores a um switch para fazer propriamente os seguintes testes.
+Agora testaremos se a conectividade e as configurações das VMs estão funcionando corretamente. Para isso, usaremos os comandos `ping` e `ssh`. Como definimos os endereços IP, nomes de host, FQDN e aliases, você pode usar qualquer uma dessas opções para se referenciar a uma máquina virtual. Portanto, nos comandos que se seguirão, você pode usar como `<alvo>` qualquer uma dessas opções.
 
 ### Ping
 
 Execute o seguinte comando para testar se as máquinas estão conseguindo se comunicar:
 
 ```bash
-ping <ip-da-vm-alvo>
+ping <alvo>
 ```
 
-![figura6](https://lh3.googleusercontent.com/St-RMKPMIyRTH4HQ-O6Vai_6VxiRD47-jpNmN_C2Z4ZI1I30NgHElq_mm-5HOOI71lNbwEqu9kgOkI6QwXLASTK6zFIdTaFFGbNxRcy38K-1ldo2EhldeNId6nTMGcwpq5Pfff6RebcZ-3Z2sB8CBjo)
+Segue alguns dos variados testes:
 
-Para isso, utilize o comando Ping <endereço-da-rede-desejada>.
+![figura9](/images/figura9.png)
+
+![figura10](/images/figura10.png)
+
+![figura11](/images/figura11.png)
+
+![figura12](/images/figura12.png)
 
 ### SSH
 
-Execute o seguinte comando para tstar se o protocolo SSH está funcionando corretamente:
+Execute o seguinte comando para tstar se o protocolo e conexão SSH estão funcionando corretamente:
 
 ```bash
-ssh <usuário-na-vm-alvo>@<ip-da-vm-alvo>
+ssh <usuário-na-vm-alvo>@<alvo>
 ```
 
-![figura7](https://lh6.googleusercontent.com/PqQI0K0SNk-WnB1e2bH8vzCIA-ETDG26zZIOYGRknFTotWsCd-lVeCdDauJfQfVNn12vJbNpdgL6QQTClQkEx7CuCpv9lRNfXtZUj87KNR9ClxNhNvtajatvnqMo6_t4XnrBpj3GAoe8f9mvfWvNJnk)
+> _Verifique se há acesso ao terminal da VM alvo. Caso haja, tudo ocorreu como esperado._
 
-Verifique se há acesso ao terminal da VM alvo. Caso haja, tudo ocorreu como esperado.
+Segue alguns dos variados testes:
 
-### Definição de nomes de usuário, FQDN e alias
+![figura13](/images/figura13.png)
 
-Para verificar se a definição ocorreu com sucesso, execute os comandos `ping` e `ssh` como mostrado anteriormente, porém com uma alteração: troque o endereço IP da máquina virtual alvo por um dos atributos definidos (hostname, FQDN ou alias).
+![figura14](/images/figura14.png)
+
+![figura15](/images/figura15.png)
+
+![figura16](/images/figura16.png)
+
+![figura17](/images/figura17.png)
+
+---
+
+## Conclusão
+
+Após os testes serem concluídos com sucesso, você já pode utilizar a sua rede recém criada e configurada para os mais diversos usos. E ainda mais! Agora você poderá montar outras redes com especificidades diferentes, conforme a sua necessidade!
+
+**Obrigado por ler até aqui! :D**
