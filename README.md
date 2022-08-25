@@ -2,6 +2,13 @@
 
 Nesse tutorial, mostraremos os passos para instalar e configurar 8 VMs interconectadas, distribuídas em 4 computadores.
 
+## Equipe
+
+- Carlos Eduardo Rocha Nunes
+- David da Silva Feitosa Junior
+- Giancarlo Lúcio do Nascimento
+- Giselle Batista Costa
+
 ## Topologia física
 
 Antes de tudo, é necessário fazer com que os PCs físicos estejam, de fato, conectados. Para isso, conecte os 4 computadores a um switch e, caso queira, conecte um cabo de acesso à internet no switch para prover o acesso aos PCs.
@@ -32,6 +39,8 @@ Os dados dessa tabela servirão como base para a configuração da interface de 
 > _Os passos a seguir, devem ser utilizados com usuário com permissão de root._
 >
 > _O procedimento mostrado será o utilizado para cada computador. Então repita o mesmo processo para todos os 4 computadores físicos, instalando 2 VMs em cada._
+
+**Os comandos para a criação e configuração dos diretórios deverão ser executados nas máquinas físicas.**
 
 - Crie uma pasta com o nome de sua preferência, no diretório de sua preferência (**certifique-se de que o usuário padrão tenha acesso ao diretório**). Escolhemos o diretório `/labredes/` como diretório base para esse guia e criamos a pasta `/labredes/projeto-913-grupo3/`.
 
@@ -87,6 +96,16 @@ sudo chmod -R 771 <diretório>
 Clique em Arquivo > Importar Appliance
 
 ![figura3](/images/figura3.png)
+
+> A imagem mostra também as informações de "hardware" de cada VM. Porém, você pode alterá-los contanto que atente-se aos requisitos mínimos do sistema operacional.
+>
+> - Para o Ubuntu Server, os requisitos **mínimos** são:
+>
+>   - RAM: 512MB;
+>   - CPU: 1 GHz;
+>   - Armazenamento: 2 GB de espaço livre.
+>
+> - Caso prefira instalar outro sistema operacional, verifique os requisitos determinados pela empresa desenvolvedora.
 
 - Inicie as VMs e em cada uma faça login com o usuário `administrador` e a senha `adminifal`.
 
@@ -188,24 +207,6 @@ Clique em Arquivo > Importar Appliance
 
   ![figura7](/images/figura7.png)
 
-- Em cada PC físico edite o arquivo `01-network-manager-all.yaml`:
-
-  Rode:
-
-  ```bash
-  sudo nano /etc/netplan/01-network-manager-all.yaml
-  ```
-
-  Deixe a propriedade `renderer` como `NetworkManager`:
-
-  ```bash
-  # Let NetworkManager manage all devices on this system
-  network:
-      version: 2
-          renderer: NetworkManager
-
-  ```
-
 - Inicie cada VM e defina o hostname de acordo com a tabela inicial:
 
   ```bash
@@ -235,6 +236,13 @@ Clique em Arquivo > Importar Appliance
   ```bash
   sudo adduser <nome-do-usuario>
   ```
+
+  > No nosso caso, criamos os seguintes usuários em cada VM:
+  >
+  > - david
+  > - eduardo
+  > - giancarlo
+  > - giselle
 
 ---
 
